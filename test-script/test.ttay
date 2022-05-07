@@ -1,0 +1,5 @@
+fn someTestFunction() {
+  // commented out code
+  var number something = 24;
+  var string test = "hey!";
+}
