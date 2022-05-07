@@ -1,20 +1,31 @@
 use std::io;
 
+use log::{error, info};
+
 use crate::Lexer;
 use crate::domain::dto::{Result};
 
 use super::{AST,Node};
 
 #[derive(Debug)]
+enum ParseType {
+    File,
+    Text,
+}
+
+#[derive(Debug)]
 pub struct Parser {
-    lexer: Lexer,
+    //lexer: Lexer,
+    text: String,
+    parse_type: ParseType,
     ast: String
 }
 
 impl Parser {
     pub fn from_text(text: &str) -> Self {
         Self {
-            lexer: Lexer::from_text(&text),
+            text: String::from(text),
+            parse_type: ParseType::Text,
             ast: String::from("test")
         }
     }
@@ -22,16 +33,21 @@ impl Parser {
     pub fn from_file(file_path: &str) -> io::Result<Self> {
         Ok(
             Self {
-                lexer: Lexer::from_file(&file_path).unwrap(),
+                text: String::from(file_path),
+                parse_type: ParseType::File,
                 ast: String::from("test")
             }
         )
     }
 
     pub fn parse(self) -> Result<AST> {
+        let lexer = match self.parse_type {
+            ParseType::File => Lexer::from_file(&self.text).unwrap(),
+            ParseType::Text => Lexer::from_text(&self.text),
+        };
 
         // setup the lexer
-        let mut lexer_iter = self.lexer.into_iter();
+        let mut lexer_iter = lexer.into_iter();
         let result = lexer_iter.next();
         
         // test outputting the strings
@@ -52,11 +68,11 @@ impl Parser {
 
         match result.unwrap() {
             Ok(token) => {
-                println!("{:?}", token);
+                info!("{:?}", token);
                 ast = AST::new(token);
             },
             Err(e) => {
-                println!("Error! {}", e);
+                error!("Error! {}", e);
                 return Err(e);
             },
         }
@@ -64,7 +80,7 @@ impl Parser {
         while let Some(ref mut test) = lexer_iter.next() {
             match test {
                 Ok(t) => {
-                    println!("{:?}", t);
+                    info!("{:?}", t);
                     // TODO: more parsing things
                 },
                 Err(e) => println!("Error! {}", e),

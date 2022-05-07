@@ -1,5 +1,7 @@
 use std::io;
 
+use log::info;
+
 use crate::{Parser, parser::AST};
 
 pub struct Interpreter {
@@ -27,10 +29,10 @@ impl Interpreter {
 
         match ast {
             Ok(ast) => {
-                println!("handling ast! {:?}", &ast);
+                info!("handling ast! {:?}", &ast);
             },
             Err(e) => {
-                println!("{}", e);
+                info!("{}", e);
                 return None;
             },
         }

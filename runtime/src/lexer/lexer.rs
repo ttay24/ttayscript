@@ -1,12 +1,13 @@
+use log::{trace, LevelFilter};
+use simple_logger::SimpleLogger;
 use std::iter::Peekable;
 use std::vec::IntoIter;
 use std::{fs, io};
-use log::trace;
 
-use crate::domain::dto::{Result};
-use crate::lexer::{VALID_OPERATORS, VALID_SEPARATORS, VALID_SYMBOLS, Operator};
 use super::token::Token;
 use super::{Literal, KEYWORDS};
+use crate::domain::dto::Result;
+use crate::lexer::{Operator, VALID_OPERATORS, VALID_SEPARATORS, VALID_SYMBOLS};
 
 #[derive(Debug)]
 pub struct Lexer {
@@ -15,6 +16,12 @@ pub struct Lexer {
 
 impl Lexer {
     pub fn from_text(text: &str) -> Self {
+        SimpleLogger::new()
+            .with_colors(true)
+            .with_level(LevelFilter::Info)
+            .init()
+            .unwrap();
+
         Lexer {
             raw_data: text.chars().collect::<Vec<_>>().into_iter().peekable(),
         }
@@ -48,7 +55,7 @@ impl Lexer {
     }
 
     fn is_identifier(c: char) -> bool {
-        c.is_ascii_alphanumeric() || c =='_'
+        c.is_ascii_alphanumeric() || c == '_'
     }
 
     fn is_keyword(identifier: &String) -> bool {
@@ -85,8 +92,7 @@ impl Iterator for Lexer {
 
             if (Self::is_keyword(&name)) {
                 token = Ok(Token::Keyword(name))
-            }
-            else {
+            } else {
                 token = Ok(Token::Identifier(name));
             }
         }
@@ -126,11 +132,9 @@ impl Iterator for Lexer {
 
                 if VALID_OPERATORS.contains(&&raw[..]) {
                     self.raw_data.next();
-                }
-                else if VALID_SEPARATORS.contains(&&raw[..]) {
+                } else if VALID_SEPARATORS.contains(&&raw[..]) {
                     self.raw_data.next();
-                }
-                else if VALID_SYMBOLS.contains(&&raw[..]) {
+                } else if VALID_SYMBOLS.contains(&&raw[..]) {
                     self.raw_data.next();
                 } else {
                     raw.pop();
@@ -152,10 +156,10 @@ impl Iterator for Lexer {
                         "*" => Ok(Token::Operator(Operator::Multiply)),
                         "/" => Ok(Token::Operator(Operator::Divide)),
                         "=" => Ok(Token::Operator(Operator::Assign)),
-                        _ => Err(String::from("Couldn't find a match"))
+                        _ => Err(String::from("Couldn't find a match")),
                     }
                     //Ok(Token::Operator(raw))
-                },
+                }
                 s if VALID_SEPARATORS.contains(&s) => Ok(Token::Separator(raw)),
                 s if VALID_SYMBOLS.contains(&s) => Ok(Token::Symbol(raw)),
                 _ => Err(format!("Unknown token: {}", raw)),
