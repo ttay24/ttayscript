@@ -1,6 +1,6 @@
 use std::io;
 
-use crate::services::Lexer;
+use crate::Lexer;
 
 pub struct Interpreter {
     lexer: Lexer,

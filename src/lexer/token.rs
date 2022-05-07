@@ -1,4 +1,4 @@
-use super::Literal;
+use super::literal::Literal;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Token {
@@ -27,3 +27,21 @@ pub fn binary_op_precedence(op: &str) -> i32 {
         _ => -1,
     }
 }
+
+pub const KEYWORDS: &[&str] = &[
+    "break", "continue", "fn", "for", "if", "return", "var", "while"
+];
+
+pub const VALID_OPERATORS: &[&str] = &[
+    "=", "+", "-", "*", "/", "==", "!=", "<", ">", "<=", ">=",
+    "{", "}", "[", "]", "(", ")", "//"
+];
+
+pub const VALID_SEPARATORS: &[&str] = &[
+    "@", "->", ";", ",", "{", "}", "[", "]", "(", ")",
+];
+
+pub const VALID_SYMBOLS: &[&str] = &[
+    "=", "+", "-", "*", "/", "==", "!=", "<", ">", "<=", ">=", "@", "->", ";", ",",
+    "{", "}", "[", "]", "(", ")", "//"
+];

@@ -3,8 +3,10 @@ use std::vec::IntoIter;
 use std::{fs, io};
 use log::trace;
 
-use crate::domain::dto::{Result, VALID_SYMBOLS, KEYWORDS, VALID_OPERATORS, VALID_SEPARATORS};
-use crate::domain::enums::{Token, Literal};
+use crate::domain::dto::{Result};
+use crate::lexer::{VALID_OPERATORS, VALID_SEPARATORS, VALID_SYMBOLS};
+use super::token::Token;
+use super::{Literal, KEYWORDS};
 
 pub struct Lexer {
     raw_data: Peekable<IntoIter<char>>,
