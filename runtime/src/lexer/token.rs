@@ -1,5 +1,15 @@
 use super::literal::Literal;
 
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Operator {
+    Plus,
+    Minus,
+    Multiply,
+    Divide,
+    Assign,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub enum Token {
     Identifier(String),
@@ -8,7 +18,7 @@ pub enum Token {
     Keyword(String),
 
     // symbol broken out
-    Operator(String),
+    Operator(Operator),
     Separator(String),
 }
 
@@ -32,9 +42,12 @@ pub const KEYWORDS: &[&str] = &[
     "break", "continue", "fn", "for", "if", "return", "var", "while"
 ];
 
-pub const VALID_OPERATORS: &[&str] = &[
+/*pub const VALID_OPERATORS: &[&str] = &[
     "=", "+", "-", "*", "/", "==", "!=", "<", ">", "<=", ">=",
     "{", "}", "[", "]", "(", ")", "//"
+];*/
+pub const VALID_OPERATORS: &[&str] = &[
+    "=", "+", "-", "*", "/"
 ];
 
 pub const VALID_SEPARATORS: &[&str] = &[

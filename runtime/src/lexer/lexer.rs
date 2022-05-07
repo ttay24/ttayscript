@@ -4,10 +4,11 @@ use std::{fs, io};
 use log::trace;
 
 use crate::domain::dto::{Result};
-use crate::lexer::{VALID_OPERATORS, VALID_SEPARATORS, VALID_SYMBOLS};
+use crate::lexer::{VALID_OPERATORS, VALID_SEPARATORS, VALID_SYMBOLS, Operator};
 use super::token::Token;
 use super::{Literal, KEYWORDS};
 
+#[derive(Debug)]
 pub struct Lexer {
     raw_data: Peekable<IntoIter<char>>,
 }
@@ -144,7 +145,17 @@ impl Iterator for Lexer {
                     self.get_next_char_while(&mut String::new(), |c| c != '\n');
                     self.next()?
                 }
-                s if VALID_OPERATORS.contains(&s) => Ok(Token::Operator(raw)),
+                s if VALID_OPERATORS.contains(&s) => {
+                    match s {
+                        "+" => Ok(Token::Operator(Operator::Plus)),
+                        "-" => Ok(Token::Operator(Operator::Minus)),
+                        "*" => Ok(Token::Operator(Operator::Multiply)),
+                        "/" => Ok(Token::Operator(Operator::Divide)),
+                        "=" => Ok(Token::Operator(Operator::Assign)),
+                        _ => Err(String::from("Couldn't find a match"))
+                    }
+                    //Ok(Token::Operator(raw))
+                },
                 s if VALID_SEPARATORS.contains(&s) => Ok(Token::Separator(raw)),
                 s if VALID_SYMBOLS.contains(&s) => Ok(Token::Symbol(raw)),
                 _ => Err(format!("Unknown token: {}", raw)),
