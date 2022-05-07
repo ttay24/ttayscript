@@ -1,10 +1,7 @@
-mod domain;
-mod interpreter;
-mod lexer;
-mod parser;
+//use interpreter::Interpreter;
+//use lexer::Lexer;
 
-use interpreter::Interpreter;
-use lexer::Lexer;
+use runtime::Interpreter;
 
 fn main() {
     /*let lexer = Lexer::from_file("./test-script/test.ttay").unwrap();

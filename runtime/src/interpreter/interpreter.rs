@@ -1,5 +1,4 @@
 use std::io;
-
 use crate::Lexer;
 
 pub struct Interpreter {

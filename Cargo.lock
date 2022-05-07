@@ -18,8 +18,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "ttayscript_compiler"
+name = "runtime"
 version = "0.1.0"
 dependencies = [
  "log",
+]
+
+[[package]]
+name = "ttayscript_compiler"
+version = "0.1.0"
+dependencies = [
+ "runtime",
 ]
